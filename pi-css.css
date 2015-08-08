@@ -1,0 +1,117 @@
+*{
+    font-family: 'Open Sans', sans-serif;
+}
+video{
+    display: block;
+}
+.overlayName{
+    position: absolute;
+    color: white;
+    margin-left: 4px;
+    z-index: 2;
+}
+.muteButton{
+    z-index: 3;
+    position: absolute;
+    float: right;
+}
+.muteButton img{
+    height: 30px;
+    width: 30px;
+    opacity: 0.8;
+}
+.mainCont{
+    position: relative;
+    margin: 0;
+    width: 100%;
+    min-width: 1360px;
+    min-height: 768px;
+    padding-top: 50px;
+    float: left;
+}
+.mainCont video{
+    background: black;
+}
+.firstView div, .firstView video{
+    min-width: 439px;
+    min-height: 200px;
+    display: inline-block;
+}
+.firstView div{
+    width: 33.333%;
+    height: 50%;
+}
+.firstView video{
+    width: 100%;
+    height: 100%;
+}
+.firstView{
+    font-size: 0px;
+}
+.firstView .overlayName{
+    font-size: 20px;
+}
+.mainView{
+    margin: 0 auto;
+    float: left;
+    width: 81.494%;
+    position: absolute;
+}
+.mainView div, .mainView video{
+    min-width: 955px;
+}
+.mainView video{
+    position: absolute;
+    background: black;
+    width: 100%;
+}
+.mainView .overlayName{
+    font-size: 25px;
+}
+.sideView{
+    min-width: 200px;
+    width: 18.46%;
+    position: absolute;
+    font-size: 20px;
+    float: right;
+    font-size: 0;
+    right: 0px;
+}
+.sideView video{
+    width: 100%;
+}
+.sideView .overlayName{
+    font-size: 15px;
+}
+/*.firstView  #s1 .muteButton, .firstView  #s2 .muteButton, .firstView  #s3 .muteButton, .firstView  #s4 .muteButton, .firstView  #s5 .muteButton, .firstView  #s6 .muteButton{
+    margin-left: 590px;
+    margin-top: 310px;
+}
+.sideView  #s1 .muteButton, .sideView  #s2 .muteButton, .sideView  #s3 .muteButton, .sideView  #s4 .muteButton, .sideView  #s5 .muteButton, .sideView  #s6 .muteButton{
+    margin-left: 275px;
+    margin-top: 120px;
+}
+.mainView  #s1 .muteButton, .mainView  #s2 .muteButton, .mainView  #s3 .muteButton, .mainView  #s4 .muteButton, .mainView  #s5 .muteButton, .mainView  #s6 .muteButton{
+    margin-left: 1440px;
+    margin-top: 790px;
+}*/
+#FixedTho{
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    margin-top: 0px;
+    background: rgba(245, 246, 248, 0.7);
+    display: block;
+    z-index: 999;
+}
+#headText{
+    position: fixed;
+    top: -15px;
+    font-size: 20px;
+    left: 10px;
+    z-index: 999;
+}
+#icon{
+    height: 40px;
+}
