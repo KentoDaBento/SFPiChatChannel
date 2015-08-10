@@ -2,11 +2,12 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="pi-css.css">
-    <link href="bootstrap.css" rel="stylesheet">
+    <link href="bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript" src="janus.js" ></script>
     <script type="text/javascript" src="jquery-1.11.3.js" ></script>
     <script type="text/javascript" src="moment.js"></script>
     <script type="text/javascript" src="moment-timezone-with-data.js"></script>
+    <script type="text/javascript" src="videoJS.js"></script>
     <script type="text/javascript" src="TweenLite.min.js"></script>
     <title>Pi Channel List</title>
 </head>
@@ -23,7 +24,7 @@
              autoplay = play video on load  
              loop = loop the video
         -->
-        <!-- Status, (Online, Offline. Catch errors.)
+        <!-- Status, (Online, Offline. Catch errors.) Firefox does not support.
              Side windows, (More CSS3 Animation) DONE (Animation not done)
              key functionality, (Some JS? Keystroke tracker?) DONE
              mute button, (Program a transparent button) DONE
@@ -34,9 +35,9 @@
                 <span class="overlayName">Chat 1<br>WWW Front-End<br>
                     <span id="timeWWWF">s</span>
                 </span>
-                <!-- <span class="muteButton" onclick="muteUnmute('1');">
+                <span class="muteButton" onclick="muteUnmute('1');">
                     <img id="m1" src="Volume%20Controls%20Volume%20up.png"/>
-                </span> -->
+                </span>
                 <video id="v1" onclick="clickFocus('s1');" autoplay loop muted>
                     <source src="shineshineshine.mp4" type="video/mp4">
                 </video>
@@ -45,9 +46,9 @@
                 <span class="overlayName">Chat 2<br>Bogota<br>
                     <span id="timeBogota">s</span>
                 </span>
-                <!-- <span class="muteButton" onclick="muteUnmute('2');">
+                <span class="muteButton" onclick="muteUnmute('2');">
                     <img id="m2" src="Volume%20Controls%20Volume%20up.png"/>
-                </span> -->
+                </span>
                 <video id="v2" onclick="clickFocus('s2');" autoplay loop muted>
                     <source src="shineshineshine.mp4" type="video/mp4">
                 </video>
@@ -56,9 +57,9 @@
                 <span class="overlayName">Chat 3<br>Uruguay
                     <br><span id="timeMontevideo">s</span>
                 </span>
-                <!-- <span class="muteButton" onclick="muteUnmute('3');">
+                <span class="muteButton" onclick="muteUnmute('3');">
                     <img id="m3" src="Volume%20Controls%20Volume%20up.png"/>
-                </span> -->
+                </span>
                 <video id="v3" onclick="clickFocus('s3');" autoplay loop muted>
                     <source src="shineshineshine.mp4" type="video/mp4">
                 </video>
@@ -68,18 +69,18 @@
                     <br>
                     <span id="timeIndy">s</span>
                 </span>
-                <!-- <span class="muteButton" onclick="muteUnmute('4');">
+                <span class="muteButton" onclick="muteUnmute('4');">
                     <img id="m4" src="Volume%20Controls%20Volume%20up.png"/>
-                </span> -->
+                </span>
                 <video id="v4" onclick="clickFocus('s4');" autoplay loop muted>
                     <source src="shineshineshine.mp4" type="video/mp4">
                 </video>
             </div>
             <div id="s5">
                 <span class="overlayName">Chat 5<br>Location</span>
-                <!-- <span class="muteButton" onclick="muteUnmute('5');">
+                <span class="muteButton" onclick="muteUnmute('5');">
                     <img id="m5" src="Volume%20Controls%20Volume%20up.png"/>
-                </span> -->
+                </span>
                 <video id="v5" onclick="clickFocus('s5');" autoplay loop muted>
                     <source src="shineshineshine.mp4" type="video/mp4">
                 </video>
@@ -88,9 +89,9 @@
                 <span class="overlayName">Chat 6<br>WWW Back-End<br>
                     <span id="timeWWWB">s</span>
                 </span>
-                <!-- <span class="muteButton" onclick="muteUnmute('6');")>
+                <span class="muteButton" onclick="muteUnmute('6');")>
                     <img id="m6" src="Volume%20Controls%20Volume%20up.png"/>
-                </span> -->
+                </span>
                 <video id="v6" onclick="clickFocus('s6');" autoplay loop muted>
                     <source src="VIDEO0009.mp4" type="video/mp4">
                 </video>
@@ -100,84 +101,8 @@
         <div class="sideView"></div>
     </div>
     <script>
-    var firstView = document.getElementsByClassName('firstView');
-    var mainView = document.getElementsByClassName('mainView');
-    var sideView = document.getElementsByClassName('sideView');
-    //Checks if videos are in sideView, then switches between the previous or next video using the arrow keys
-    document.addEventListener('keydown', function(event) {
-        if(mainView[0].hasChildNodes() === true){
-            var child = parseInt(mainView[0].firstChild.id.substring(1));
-            if (event.keyCode === 37 && child != 1) {
-                $("#s" + (child - 1)).after($("#s" + child));
-                setTimeout(function(){
-                    $(".mainView").append($("#s" + (child - 1)));
-                }, 0.1);
-            }
-            else if (event.keyCode === 39 && child != 6) {
-                $("#s" + (child + 1)).before($("#s" + child));
-                setTimeout(function(){
-                    $(".mainView").append($("#s" + (child + 1)));
-                }, 0.5);
-            }
-            setTimeout(function(){
-                for(var i = 1; i <= 6; i++){
-                    document.getElementById('v' + i).play();
-                }
-            }, 0.1);
-        }
-    }, true);
-    // click video player to enlarge the size of the player
-    function clickFocus(elem){
-        var textNum = parseInt(elem.substring(1));
-        var elementes = document.getElementById(elem);
-        if(elementes.parentNode === mainView[0]){
-           for(var i = 1; i <= 6; i++){
-               $(".firstView").append($("#s" + i));
-            }
-        }
-        else{
-            for(var i = 1; i <= 6; i++){
-                if(i === textNum){
-                    $(".mainView").append($("#s" + i));
-                }
-                else{
-                    $(".sideView").append($("#s" + i));
-                }
-            }
-        }
-        setTimeout(function(){
-            for(var i = 1; i <= 6; i++){
-                document.getElementById('v' + i).play();
-            }
-        }, 0);
-    }
-    //mute/unmute button
-    function muteUnmute(elem){
-        var vidElem = document.getElementById('v' + elem);
-        var muteElem = document.getElementById('m' + elem);
-        if(vidElem.muted === true){
-            vidElem.muted = false;
-            muteElem.src = 'Volume%20Controls%20Volume%20up.png'
-        }
-        else{
-            vidElem.muted = true;
-            muteElem.src = 'Volume%20Controls%20Mute.png'
-        }
-    }
-    //timezone display
-    function showTheTime() {
-        var s = moment().tz("America/Los_Angeles").format('hh:mm a');
-        var b = moment().tz("America/Bogota").format('hh:mm a');
-        var u = moment().tz("America/Montevideo").format('hh:mm a');
-        var i = moment().tz("America/Indiana/Indianapolis").format('hh:mm a');
-        document.getElementById("timeWWWF").innerHTML = s;
-        document.getElementById("timeWWWB").innerHTML = s;
-        document.getElementById("timeBogota").innerHTML = b;
-        document.getElementById("timeMontevideo").innerHTML = u;
-        document.getElementById("timeIndy").innerHTML = i;
-    }
-    showTheTime(); // for the first load
-    setInterval(showTheTime, 250); // update it periodically
+        showTheTime(); // for the first load
+        setInterval(showTheTime, 250); // update it periodically
     </script>
 </body>
 </html>
