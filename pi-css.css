@@ -3,6 +3,8 @@
 }
 video{
     display: block;
+    width: 100%;
+    background-color: black;
 }
 .overlayName{
     position: absolute;
@@ -13,7 +15,6 @@ video{
 .muteButton{
     z-index: 3;
     position: absolute;
-    float: right;
 }
 .muteButton img{
     height: 30px;
@@ -22,76 +23,45 @@ video{
 }
 .mainCont{
     position: relative;
-    margin: 0;
     width: 100%;
     min-width: 1360px;
-    min-height: 768px;
     padding-top: 50px;
-    float: left;
-}
-.mainCont video{
-    background: black;
-}
-.firstView div, .firstView video{
-    min-width: 439px;
-    min-height: 200px;
-    display: inline-block;
 }
 .firstView div{
+    display: inline-block;
     width: 33.333%;
     height: 50%;
 }
-.firstView video{
-    width: 100%;
-    height: 100%;
-}
-.firstView{
+.firstView, .sideView{
     font-size: 0px;
 }
 .firstView .overlayName{
     font-size: 20px;
 }
 .mainView{
-    margin: 0 auto;
-    float: left;
     width: 83.3%;
     position: absolute;
-}
-.mainView div, .mainView video{
-    min-width: 955px;
-}
-.mainView video{
-    position: absolute;
-    background: black;
-    width: 100%;
 }
 .mainView .overlayName{
     font-size: 25px;
 }
 .sideView{
-    min-width: 200px;
     width: 16.7%;
     position: absolute;
-    font-size: 20px;
-    float: right;
-    font-size: 0;
     right: 0px;
-}
-.sideView video{
-    width: 100%;
 }
 .sideView .overlayName{
     font-size: 15px;
 }
-.firstView  #s1 .muteButton, .firstView  #s2 .muteButton, .firstView  #s3 .muteButton, .firstView  #s4 .muteButton, .firstView  #s5 .muteButton, .firstView  #s6 .muteButton{
+.firstView .muteButton{
     margin-left: 30.5%;
     margin-top: 16.2%;
 }
-.sideView  #s1 .muteButton, .sideView  #s2 .muteButton, .sideView  #s3 .muteButton, .sideView  #s4 .muteButton, .sideView  #s5 .muteButton, .sideView  #s6 .muteButton{
+.sideView .muteButton{
     margin-left: 86%;
     margin-top: 44%;
 }
-.mainView  #s1 .muteButton, .mainView  #s2 .muteButton, .mainView  #s3 .muteButton, .mainView  #s4 .muteButton, .mainView  #s5 .muteButton, .mainView  #s6 .muteButton{
+.mainView .muteButton{
     margin-left: 97%;
     margin-top: 53%;
 }

@@ -10,9 +10,7 @@ function showTheTime() {
     document.getElementById("timeMontevideo").innerHTML = u;
     document.getElementById("timeIndy").innerHTML = i;
 }
-var firstView = document.getElementsByClassName('firstView');
 var mainView = document.getElementsByClassName('mainView');
-var sideView = document.getElementsByClassName('sideView');
 //Checks if videos are in sideView, then switches between the previous or next video using the arrow keys
 document.addEventListener('keydown', function(event) {
     if(mainView[0].hasChildNodes() === true){
@@ -20,13 +18,13 @@ document.addEventListener('keydown', function(event) {
         if (event.keyCode === 37 && child != 1) {
             $("#s" + (child - 1)).after($("#s" + child));
             setTimeout(function(){
-                $(".mainView").append($("#s" + (child - 1)));
+                $('.mainView').append($("#s" + (child - 1)));
             }, 0.1);
         }
         else if (event.keyCode === 39 && child != 6) {
             $("#s" + (child + 1)).before($("#s" + child));
             setTimeout(function(){
-                $(".mainView").append($("#s" + (child + 1)));
+                $('.mainView').append($("#s" + (child + 1)));
             }, 0.5);
         }
         setTimeout(function(){
@@ -36,22 +34,22 @@ document.addEventListener('keydown', function(event) {
         }, 0.1);
     }
 }, true);
-// click video player to enlarge the size of the player
+// click video player to enlarge the size of the playerd
 function clickFocus(elem){
     var textNum = parseInt(elem.substring(1));
     var elementes = document.getElementById(elem);
     if(elementes.parentNode === mainView[0]){
        for(var i = 1; i <= 6; i++){
-           $(".firstView").append($("#s" + i));
+           $('.firstView').append($("#s" + i));
         }
     }
     else{
         for(var i = 1; i <= 6; i++){
             if(i === textNum){
-                $(".mainView").append($("#s" + i));
+                $('.mainView').append($("#s" + i));
             }
             else{
-                $(".sideView").append($("#s" + i));
+                $('.sideView').append($("#s" + i));
             }
         }
     }
