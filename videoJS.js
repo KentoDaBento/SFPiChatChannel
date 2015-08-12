@@ -65,10 +65,10 @@ function muteUnmute(elem){
     var muteElem = document.getElementById('m' + elem);
     if(vidElem.muted === true){
         vidElem.muted = false;
-        muteElem.src = 'Volume%20Controls%20Volume%20up.png'
+        muteElem.src = 'VolumeUp.png'
     }
     else{
         vidElem.muted = true;
-        muteElem.src = 'Volume%20Controls%20Mute.png'
+        muteElem.src = 'Mute.png'
     }
 }
