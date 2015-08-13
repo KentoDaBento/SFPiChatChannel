@@ -21,5 +21,7 @@ A multi-streaming capable webpage, with a couple neat features.
 
 **muteUnmute()** is a function that is activated once the volume icon is clicked, to either mute the video, or unmute the video.
 
+**EDIT: ** Added a fullscreen and rounded edge for videos functionality. Press F for fullscreen and E for rounded edges. 
+
 # Who wrote all this?
 An intern.
