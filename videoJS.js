@@ -11,6 +11,8 @@ function showTheTime() {
     document.getElementById("timeIndy").innerHTML = i;
 }
 var mainView = document.getElementsByClassName('mainView');
+var videoElem = document.getElementsByTagName('video');
+var pix = '0px';
 //Checks if videos are in sideView, then switches between the previous or next video using the arrow keys
 document.addEventListener('keydown', function(event) {
     if(mainView[0].hasChildNodes() === true){
@@ -33,11 +35,33 @@ document.addEventListener('keydown', function(event) {
             }
         }, 0.1);
     }
+    if(event.keyCode === 70){
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        }
+    }
+    if(event.keyCode === 69){
+        if(videoElem[0].style.borderRadius === '15px'){
+            pix = '0px';
+        }
+        else{
+            pix = '15px';
+        }
+        for(var i = 0; i < 6; i++){
+            videoElem[i].style.borderRadius = pix;
+        }
+    }
 }, true);
 // click video player to enlarge the size of the playerd
-function clickFocus(elem){
-    var textNum = parseInt(elem.substring(1));
-    var elementes = document.getElementById(elem);
+function clickFocus(element){
+    var textNum = parseInt(element.substring(1));
+    var elementes = document.getElementById(element);
     if(elementes.parentNode === mainView[0]){
        for(var i = 1; i <= 6; i++){
            $('.firstView').append($("#s" + i));
@@ -60,9 +84,9 @@ function clickFocus(elem){
     }, 0);
 }
 //mute/unmute button
-function muteUnmute(elem){
-    var vidElem = document.getElementById('v' + elem);
-    var muteElem = document.getElementById('m' + elem);
+function muteUnmute(element){
+    var vidElem = document.getElementById('v' + element);
+    var muteElem = document.getElementById('m' + element);
     if(vidElem.muted === true){
         vidElem.muted = false;
         muteElem.src = 'VolumeUp.png'

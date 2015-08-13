@@ -10,7 +10,7 @@
     <script type="text/javascript" src="videoJS.js"></script>
     <title>Pi Channel List</title>
 </head>
-<body>
+<body id="container">
     <header id="FixedTho">
         <h1 id="headText">
             <img id="icon" src="http://www2.sfdcstatic.com/common/assets/img/logo-company.png"/> 
@@ -102,6 +102,7 @@
     <script>
         showTheTime(); // for the first load
         setInterval(showTheTime, 250); // update it periodically
+        var elem = document.getElementById('container');
     </script>
 </body>
 </html>

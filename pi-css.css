@@ -65,6 +65,10 @@ video{
     margin-left: 97%;
     margin-top: 53%;
 }
+#container{
+    height: 100%;
+    width: 100%;
+}
 #FixedTho{
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
     height: 50px;
