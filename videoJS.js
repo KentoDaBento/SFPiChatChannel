@@ -10,39 +10,44 @@ function showTheTime() {
     document.getElementById("timeMontevideo").innerHTML = u;
     document.getElementById("timeIndy").innerHTML = i;
 }
+function playAll(){
+    setTimeout(function(){
+        for(var i = 0; i <= 5; i++)
+        document.getElementsByTagName('video')[i].play();
+    }, 0);
+}
 var mainView = document.getElementsByClassName('mainView');
-var videoElem = document.getElementsByTagName('video');
-var pix = '0px';
 //Checks if videos are in sideView, then switches between the previous or next video using the arrow keys
 document.addEventListener('keydown', function(event) {
+    var pix = '0px';
+    var videoElem = document.getElementsByTagName('video');
     if(mainView[0].hasChildNodes() === true){
         var child = parseInt(mainView[0].firstChild.id.substring(1));
-        if (event.keyCode === 37 && child != 1) {
+        if (event.keyCode === 37 && child !== 1) {
             $("#s" + (child - 1)).after($("#s" + child));
             setTimeout(function(){
                 $('.mainView').append($("#s" + (child - 1)));
             }, 0.1);
         }
-        else if (event.keyCode === 39 && child != 6) {
+        else if (event.keyCode === 39 && child !== 6) {
             $("#s" + (child + 1)).before($("#s" + child));
             setTimeout(function(){
                 $('.mainView').append($("#s" + (child + 1)));
             }, 0.5);
         }
-        setTimeout(function(){
-            for(var i = 1; i <= 6; i++){
-                document.getElementById('v' + i).play();
-            }
-        }, 0.1);
+        playAll();
     }
     if(event.keyCode === 70){
-        if (elem.requestFullscreen) {
+        if(elem.requestFullscreen){
             elem.requestFullscreen();
-        } else if (elem.msRequestFullscreen) {
+        }
+        else if(elem.msRequestFullscreen){
             elem.msRequestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
+        }
+        else if(elem.mozRequestFullScreen){
             elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) {
+        }
+        else if(elem.webkitRequestFullscreen){
             elem.webkitRequestFullscreen();
         }
     }
@@ -58,7 +63,17 @@ document.addEventListener('keydown', function(event) {
         }
     }
 }, true);
-// click video player to enlarge the size of the playerd
+//test JS
+document.addEventListener('click', function(e) {
+    var target = e.target.parentNode;
+    if(e.target.tagName === 'VIDEO'){
+        clickFocus(target.id + '');
+    }
+    else{
+        muteUnmute(target.parentNode.id + '');
+    }
+}, false);
+// click video player to enlarge the size of the player
 function clickFocus(element){
     var textNum = parseInt(element.substring(1));
     var elementes = document.getElementById(element);
@@ -77,16 +92,14 @@ function clickFocus(element){
             }
         }
     }
-    setTimeout(function(){
-        for(var i = 1; i <= 6; i++){
-           document.getElementById('v' + i).play();
-        }
-    }, 0);
+    playAll();
 }
 //mute/unmute button
 function muteUnmute(element){
-    var vidElem = document.getElementById('v' + element);
-    var muteElem = document.getElementById('m' + element);
+    var vid = document.getElementById(element);
+    console.log(vid);
+    var vidElem = vid.getElementsByTagName('video')[0];
+    var muteElem = vid.getElementsByTagName('img')[0];
     if(vidElem.muted === true){
         vidElem.muted = false;
         muteElem.src = 'VolumeUp.png'
