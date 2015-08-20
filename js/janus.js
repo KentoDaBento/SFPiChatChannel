@@ -46,7 +46,7 @@ Janus.init = function(options) {
 		}
 		// Helper to add external JavaScript sources
 		function addJs(src) {
-			if(src === 'jquery.min.js') {
+			if(src === 'js/jquery.min.js') {
 				if(window.jQuery) {
 					// Already loaded
 					options.callback();
@@ -59,15 +59,15 @@ Janus.init = function(options) {
 			oScript.src = src;
 			oScript.onload = function() {
 				Janus.log("Library " + src + " loaded");
-				if(src === 'jquery.min.js') {
+				if(src === 'js/jquery.min.js') {
 					options.callback();
 				}
 			}
 			oHead.appendChild(oScript);
 		};
 
-		addJs('adapter.js');
-		addJs('jquery.min.js');
+		addJs('js/adapter.js');
+		addJs('js/jquery.min.js');
 	}
 };
 

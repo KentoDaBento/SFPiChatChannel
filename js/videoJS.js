@@ -10,84 +10,94 @@ function showTheTime() {
     document.getElementById("timeMontevideo").innerHTML = u;
     document.getElementById("timeIndy").innerHTML = i;
 }
-function playAll(){
-    setTimeout(function(){
-        for(var i = 0; i <= 5; i++)
-        document.getElementsByTagName('video')[i].play();
-    }, 0);
+function playAll() {
+    for(var t = 0; t <= 5; t++) {
+        document.getElementsByTagName('video')[t].play();
+    }
 }
 var mainView = document.getElementsByClassName('mainView');
 //Checks if videos are in sideView, then switches between the previous or next video using the arrow keys
 document.addEventListener('keydown', function(event) {
+    var elem = document.getElementById('container');
     var pix = '0px';
     var videoElem = document.getElementsByTagName('video');
-    if(mainView[0].hasChildNodes() === true){
+    if(mainView[0].hasChildNodes() === true) {
         var child = parseInt(mainView[0].firstChild.id.substring(1));
         if (event.keyCode === 37 && child !== 1) {
             $("#s" + (child - 1)).after($("#s" + child));
-            setTimeout(function(){
+            setTimeout(function() {
                 $('.mainView').append($("#s" + (child - 1)));
             }, 0.1);
         }
         else if (event.keyCode === 39 && child !== 6) {
             $("#s" + (child + 1)).before($("#s" + child));
-            setTimeout(function(){
+            setTimeout(function() {
                 $('.mainView').append($("#s" + (child + 1)));
             }, 0.5);
         }
         playAll();
     }
-    if(event.keyCode === 70){
-        if(elem.requestFullscreen){
+    if(event.keyCode === 70) {
+        if(elem.requestFullscreen) {
             elem.requestFullscreen();
         }
-        else if(elem.msRequestFullscreen){
+        else if(elem.msRequestFullscreen) {
             elem.msRequestFullscreen();
         }
-        else if(elem.mozRequestFullScreen){
+        else if(elem.mozRequestFullScreen) {
             elem.mozRequestFullScreen();
         }
-        else if(elem.webkitRequestFullscreen){
+        else if(elem.webkitRequestFullscreen) {
             elem.webkitRequestFullscreen();
         }
     }
-    if(event.keyCode === 69){
-        if(videoElem[0].style.borderRadius === '15px'){
+    if(event.keyCode === 69) {
+        if(videoElem[0].style.borderRadius === '15px') {
             pix = '0px';
         }
-        else{
+        else {
             pix = '15px';
         }
-        for(var i = 0; i < 6; i++){
+        for(var i = 0; i < 6; i++) {
             videoElem[i].style.borderRadius = pix;
         }
     }
 }, true);
 //test JS
-document.addEventListener('click', function(e) {
-    var target = e.target.parentNode;
-    if(e.target.tagName === 'VIDEO'){
-        clickFocus(target.id + '');
+function check() {
+    for(var i = 0; i < 6; i++) {
+        createListeners('VIDEO', i);
+        createListeners('IMG', i);
     }
-    else{
-        muteUnmute(target.parentNode.id + '');
-    }
-}, false);
+}
+function createListeners(tagname, times) {
+    var test = document.getElementsByClassName('mainCont')[0];
+    test.getElementsByTagName(tagname)[times].addEventListener('click', function(e) {
+        var target = e.target.parentNode;
+        if(tagname === 'VIDEO') {
+            clickFocus(target.id);
+        }
+        else if(tagname === 'IMG') {
+            target = target.parentNode;
+            muteUnmute(target.id);
+        }
+    }, false);
+}
 // click video player to enlarge the size of the player
-function clickFocus(element){
+function clickFocus(element) {
     var textNum = parseInt(element.substring(1));
     var elementes = document.getElementById(element);
-    if(elementes.parentNode === mainView[0]){
-       for(var i = 1; i <= 6; i++){
-           $('.firstView').append($("#s" + i));
+    if(elementes.parentNode === document.getElementsByClassName('mainView')[0]) {
+       for(var k = 1; k <= 6; k++) {
+           $('.firstView').append($("#s" + k));
         }
     }
-    else{
-        for(var i = 1; i <= 6; i++){
-            if(i === textNum){
+    else {
+        for(var i = 1; i <= 6; i++) {
+            if(i === textNum) {
                 $('.mainView').append($("#s" + i));
             }
-            else{
+            else {
                 $('.sideView').append($("#s" + i));
             }
         }
@@ -95,17 +105,16 @@ function clickFocus(element){
     playAll();
 }
 //mute/unmute button
-function muteUnmute(element){
+function muteUnmute(element) {
     var vid = document.getElementById(element);
-    console.log(vid);
     var vidElem = vid.getElementsByTagName('video')[0];
     var muteElem = vid.getElementsByTagName('img')[0];
-    if(vidElem.muted === true){
+    if(vidElem.muted === true) {
         vidElem.muted = false;
-        muteElem.src = 'VolumeUp.png'
-    }
-    else{
+        muteElem.src = 'VolumeUp.png';
+    } 
+    else {
         vidElem.muted = true;
-        muteElem.src = 'Mute.png'
+        muteElem.src = 'Mute.png';
     }
 }

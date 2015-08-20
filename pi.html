@@ -1,29 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="pi-css.css">
-    <link href="bootstrap.min.css" rel="stylesheet">
-    <script type="text/javascript" src="janus.js" ></script>
-    <script type="text/javascript" src="jquery.min.js" ></script>
-    <script type="text/javascript" src="moment.min.js"></script>
-    <script type="text/javascript" src="moment-timezone.min.js"></script>
-    <script type="text/javascript" src="videoJS.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/pi-css.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <title>Pi Channel List</title>
 </head>
 <body id="container">
     <header id="FixedTho">
         <h1 id="headText">
-            <img id="icon" src="http://www2.sfdcstatic.com/common/assets/img/logo-company.png"/> 
+            <img id="icon" src="img/logo-company.png"/> 
             SFPi Chat Channel
         </h1>
     </header>
     <div class="mainCont">
         <div class="firstView">
-        <!-- control = video control (Pause, Play, Sound, Fullscreen)
+            <!-- control = video control (Pause, Play, Sound, Fullscreen)
              autoplay = play video on load  
              loop = loop the video
         -->
-        <!-- Status, (Online, Offline. Catch errors.) Firefox does not support.
+            <!-- Status, (Online, Offline. Catch errors.) Firefox does not support.
              Side windows, (More CSS3 Animation) DONE (Animation not done)
              key functionality, (Some JS? Keystroke tracker?) DONE
              mute button, (Program a transparent button) DONE
@@ -35,7 +30,7 @@
                     <span id="timeWWWF">s</span>
                 </span>
                 <span class="muteButton">
-                    <img src="VolumeUp.png"/>
+                    <img src="img/VolumeUp.png"/>
                 </span>
                 <video autoplay loop muted>
                     <source src="shineshineshine.mp4" type="video/mp4">
@@ -46,7 +41,7 @@
                     <span id="timeBogota">s</span>
                 </span>
                 <span class="muteButton">
-                    <img src="VolumeUp.png"/>
+                    <img src="img/VolumeUp.png"/>
                 </span>
                 <video autoplay loop muted>
                     <source src="shineshineshine.mp4" type="video/mp4">
@@ -57,10 +52,10 @@
                     <br><span id="timeMontevideo">s</span>
                 </span>
                 <span class="muteButton">
-                    <img src="VolumeUp.png"/>
+                    <img src="img/VolumeUp.png"/>
                 </span>
                 <video autoplay loop muted>
-                    <source src="shineshineshine.mp4" type="video/mp4">
+                    <source src="VIDEO0009.mp4" type="video/mp4">
                 </video>
             </div>
             <div id="s4">
@@ -69,7 +64,7 @@
                     <span id="timeIndy">s</span>
                 </span>
                 <span class="muteButton">
-                    <img src="VolumeUp.png"/>
+                    <img src="img/VolumeUp.png"/>
                 </span>
                 <video autoplay loop muted>
                     <source src="shineshineshine.mp4" type="video/mp4">
@@ -78,7 +73,7 @@
             <div id="s5">
                 <span class="overlayName">Chat 5<br>Location</span>
                 <span class="muteButton">
-                    <img src="VolumeUp.png"/>
+                    <img src="img/VolumeUp.png"/>
                 </span>
                 <video autoplay loop muted>
                     <source src="shineshineshine.mp4" type="video/mp4">
@@ -89,7 +84,7 @@
                     <span id="timeWWWB">s</span>
                 </span>
                 <span class="muteButton">
-                    <img src="VolumeUp.png"/>
+                    <img src="img/VolumeUp.png"/>
                 </span>
                 <video autoplay loop muted>
                     <source src="VIDEO0009.mp4" type="video/mp4">
@@ -99,10 +94,162 @@
         <div class="mainView"></div>
         <div class="sideView"></div>
     </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/moment.min.js"></script>
+    <script type="text/javascript" src="js/moment-timezone.min.js"></script>
+    <script type="text/javascript" src="js/adapter.js"></script>
+    <script type="text/javascript" src="js/janus.js"></script>
+    <script type="text/javascript" src="js/videoJS.js"></script>
+    <script type="text/javascript" src="http://janus.conf.meetecho.com/js/spin.min.js"></script>
     <script>
         showTheTime(); // for the first load
-        setInterval(showTheTime, 250); // update it periodically
-        var elem = document.getElementById('container');
+        setInterval(showTheTime, 250); // update it periodically   
+        check();
+        $(document).ready(function() {
+            var streaming = null;
+            var spinner = null;
+        // Initialize the library (console debug enabled)
+        Janus.init({debug: true, callback: function() {
+        // Use a button to start the demo
+        $('#start').click(function() {
+            if(started)
+                return;
+            started = true;
+            $(this).attr('disabled', true).unbind('click');
+            // Make sure the browser supports WebRTC
+            if(!Janus.isWebrtcSupported()) {
+                bootbox.alert("No WebRTC support... ");
+                return;
+            }
+            // Create session
+            janus = new Janus(
+                {
+                    server: 'http://54.148.218.94:8088/janus',
+                    success: function() {
+                        // Attach to streaming plugin
+                        janus.attach(
+                            {
+                                plugin: "janus.plugin.streaming",
+                                success: function(pluginHandle) {
+                                    $('#details').remove();
+                                    streaming = pluginHandle;
+                                    console.log("Plugin attached! (" + streaming.getPlugin() + ", id=" + streaming.getId() + ")");
+                                    // Setup streaming session
+                                    $('#update-streams').click(updateStreamsList);
+                                    updateStreamsList();
+                                    $('#start').removeAttr('disabled').html("Stop")
+                                        .click(function() {
+                                            $(this).attr('disabled', true);
+                                            janus.destroy();
+                                            $('#streamslist').attr('disabled', true);
+                                            $('#watch').attr('disabled', true).unbind('click');
+                                            $('#start').attr('disabled', true).html("Bye").unbind('click');
+                                        });
+                                },
+                                error: function(error) {
+                                    console.log("  -- Error attaching plugin... " + error);
+                                    bootbox.alert("Error attaching plugin... " + error);
+                                },
+                                onmessage: function(msg, jsep) {
+                                    console.log(" ::: Got a message :::");
+                                    console.log(JSON.stringify(msg));
+                                    var result = msg["result"];
+                                    if(result !== null && result !== undefined) {
+                                        if(result["status"] !== undefined && result["status"] !== null) {
+                                            var status = result["status"];
+                                            if(status === 'starting')
+                                                $('#status').removeClass('hide').text("Starting, please wait...").show();
+                                            else if(status === 'started')
+                                                $('#status').removeClass('hide').text("Started").show();
+                                            else if(status === 'stopped')
+                                                stopStream();
+                                        }
+                                    }
+                                    if(jsep !== undefined && jsep !== null) {
+                                        console.log("Handling SDP as well...");
+                                        console.log(jsep);
+                                        // Answer
+                                        streaming.createAnswer(
+                                            {
+                                                jsep: jsep,
+                                                media: { audioSend: false, videoSend: false },  // We want recvonly audio/video
+                                                success: function(jsep) {
+                                                    console.log("Got SDP!");
+                                                    console.log(jsep);
+                                                    var body = { "request": "start" };
+                                                    streaming.send({"message": body, "jsep": jsep});
+                                                    $('#watch').html("Stop").removeAttr('disabled').click(stopStream);
+                                                },
+                                                error: function(error) {
+                                                    console.log("WebRTC error:");
+                                                    console.log(error);
+                                                    bootbox.alert("WebRTC error... " + JSON.stringify(error));
+                                                }
+                                            });
+                                    }
+                                },
+                                onremotestream: function(stream) {
+                                    console.log(" ::: Got a remote stream :::");
+                                    console.log(JSON.stringify(stream));
+                                    if($('#remotevideo').length === 0)
+                                        $('#stream').append('<video class="rounded centered hide" id="remotevideo" width=320 height=240 autoplay/>');
+                                    // Show the stream and hide the spinner when we get a playing event
+                                    $("#remotevideo").bind("playing", function () {
+                                        $('#waitingvideo').remove();
+                                        $('#remotevideo').removeClass('hide');
+                                        if(spinner !== null && spinner !== undefined)
+                                            spinner.stop();
+                                        spinner = null;
+                                    });
+                                    attachMediaStream($('#remotevideo').get(0), stream);
+                                },
+                                oncleanup: function() {
+                                    console.log(" ::: Got a cleanup notification :::");
+                                    $('#remotevideo').remove();
+                                }
+                            });
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        bootbox.alert(error, function() {
+                            window.location.reload();
+                        });
+                    },
+                    destroyed: function() {
+                        window.location.reload();
+                    }
+                });
+            });
+        }});
+    });
+        function startStream() {
+            var spinner = null;
+            var selectedStream = '10';
+            console.log("Selected video id #" + selectedStream);
+            if (selectedStream === undefined || selectedStream === null) {
+                bootbox.alert("Select a stream from the list");
+                return;
+            }
+            $('#streamset').attr('disabled', true);
+            $('#streamslist').attr('disabled', true);
+            $('#watch').attr('disabled', true).unbind('click');
+            var body = {
+                "request": "watch",
+                id: parseInt(selectedStream)
+            };
+            // No remote video yet
+            $('#stream').append('<video class="rounded centered" id="waitingvideo" width=320 height=240 />');
+            if (spinner == null) {
+                var target = document.getElementById('stream');
+                spinner = new Spinner({
+                    top: 100
+                }).spin(target);
+            } else {
+                spinner.spin();
+            }
+        }
+        startStream();
     </script>
 </body>
+
 </html>
