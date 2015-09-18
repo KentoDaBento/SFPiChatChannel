@@ -111,10 +111,10 @@ function muteUnmute(element) {
     var muteElem = vid.getElementsByTagName('img')[0];
     if(vidElem.muted === true) {
         vidElem.muted = false;
-        muteElem.src = 'VolumeUp.png';
+        muteElem.src = 'img/VolumeUp.png';
     } 
     else {
         vidElem.muted = true;
-        muteElem.src = 'Mute.png';
+        muteElem.src = 'img/Mute.png';
     }
 }

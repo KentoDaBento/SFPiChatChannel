@@ -52,11 +52,11 @@ var janus = null;
 var streaming = null;
 var started = false;
 var spinner = null;
-
 var selectedStream = null;
 
 
-$(document).ready(function() {
+function janusInit() {
+	console.log('ready!');
 	// Initialize the library (console debug enabled)
 	Janus.init({debug: true, callback: function() {
 			// Create session
@@ -74,14 +74,16 @@ $(document).ready(function() {
 									streaming = pluginHandle;
 									console.log("Plugin attached! (" + streaming.getPlugin() + ", id=" + streaming.getId() + ")");
 									// Setup streaming session
-									// $('#start').removeAttr('disabled').html("Stop")
-									// 	.click(function() {
-									// 		$(this).attr('disabled', true);
-									// 		janus.destroy();
-									// 		$('#streamslist').attr('disabled', true);
-									// 		$('#watch').attr('disabled', true).unbind('click');
-									// 		$('#start').attr('disabled', true).html("Bye").unbind('click');
-									// 	});
+									$('#update-streams').click(updateStreamsList);
+									updateStreamsList();
+									$('#start').removeAttr('disabled').html("Stop")
+										.click(function() {
+											$(this).attr('disabled', true);
+											janus.destroy();
+											$('#streamslist').attr('disabled', true);
+											$('#watch').attr('disabled', true).unbind('click');
+											$('#start').attr('disabled', true).html("Bye").unbind('click');
+										});
 								},
 								error: function(error) {
 									console.log("  -- Error attaching plugin... " + error);
@@ -128,15 +130,15 @@ $(document).ready(function() {
 								onremotestream: function(stream) {
 									console.log(" ::: Got a remote stream :::");
 									console.log(JSON.stringify(stream));
-									if($('#remotevideo').length === 0)
-										$('#stream').append('<video class="rounded centered hide" id="remotevideo" width=320 height=240 autoplay/>');
+									// if($('#s6').length === 0)
+										$('#s6').append('<video id="remotevideo" autoplay/>');
 									// Show the stream and hide the spinner when we get a playing event
-									$("#remotevideo").bind("playing", function () {
+									$("#s6").bind("playing", function () {
 										$('#waitingvideo').remove();
 										$('#remotevideo').removeClass('hide');
-										if(spinner !== null && spinner !== undefined)
-											spinner.stop();
-										spinner = null;
+										// if(spinner !== null && spinner !== undefined)
+										// 	spinner.stop();
+										// spinner = null;
 									});
 									attachMediaStream($('#remotevideo').get(0), stream);
 								},
@@ -159,10 +161,44 @@ $(document).ready(function() {
 					}
 				});
 	}});
-});
+}
+function updateStreamsList() {
+	$('#update-streams').unbind('click').addClass('fa-spin');
+	var body = { "request": "list" };
+	console.log("Sending message (" + JSON.stringify(body) + ")");
+	streaming.send({"message": body, success: function(result) {
+		console.log('updating stream list');
+		setTimeout(function() {
+			$('#update-streams').removeClass('fa-spin').click(updateStreamsList);
+		}, 500);
+		if(result === null || result === undefined) {
+			bootbox.alert("Got no response to our query for available streams");
+			return;
+		}
+		if(result["list"] !== undefined && result["list"] !== null) {
+			$('#streams').removeClass('hide').show();
+			$('#streamslist').empty();
+			$('#watch').attr('disabled', true).unbind('click');
+			var list = result["list"];
+			console.log("Got a list of available streams:");
+			console.log(list);
+			for(var mp in list) {
+				console.log("  >> [" + list[mp]["id"] + "] " + list[mp]["description"] + " (" + list[mp]["type"] + ")");
+				$('#streamslist').append("<li><a href='#' id='" + list[mp]["id"] + "'>" + list[mp]["description"] + " (" + list[mp]["type"] + ")" + "</a></li>");
+			}
+			$('#streamslist a').unbind('click').click(function() {
+				selectedStream = $(this).attr("id");
+				$('#streamset').html($(this).html()).parent().removeClass('open');
+				return false;
+
+			});
+			$('#watch').removeAttr('disabled').click(startStream);
+		}
+	}});
+}
 
 function startStream() {
-	var selectedStream = '3';
+	var selectedStream = '10';
 	console.log("Selected video id #" + selectedStream);
 	if(selectedStream === undefined || selectedStream === null) {
 		bootbox.alert("Select a stream from the list");
@@ -172,13 +208,29 @@ function startStream() {
 	$('#streamslist').attr('disabled', true);
 	$('#watch').attr('disabled', true).unbind('click');
 	var body = { "request": "watch", id: parseInt(selectedStream) };
-	// streaming.send({"message": body});
+	streaming.send({"message": body});
 	// No remote video yet
-	$('#s6').append('<video id="s7"/>');
-	if(spinner == null) {
-		var target = document.getElementById('stream');
-		spinner = new Spinner({top:100}).spin(target);
-	} else {
-		spinner.spin();
-	}
+	// $('#s6').append('<video id="waitingvideo"/>');
+	// if(spinner == null) {
+	// 	var target = document.getElementById('stream');
+	// 	spinner = new Spinner({top:100}).spin(target);
+	// } else {
+	// 	spinner.spin();
+	// }
 }
+
+function stopStream() {
+	$('#watch').attr('disabled', true).unbind('click');
+	var body = { "request": "stop" };
+	streaming.send({"message": body});
+	streaming.hangup();
+	$('#streamset').removeAttr('disabled');
+	$('#streamslist').removeAttr('disabled');
+	$('#watch').html("Watch or Listen").removeAttr('disabled').click(startStream);
+	$('#status').empty().hide();
+}
+
+ // Janus(janus);
+// Memo:
+// both startStream and onremotestream have been modified for testing reasons,
+// remodify them when needed, or when creating a new function.

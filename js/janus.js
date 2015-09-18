@@ -1296,7 +1296,6 @@ function Janus(gatewayCallbacks) {
 						callbacks.error('No capture device found');
 						return false;
 					}
-
 					getUserMedia(
 						{audio: audioExist && isAudioSendEnabled(media), video: videoExist ? videoSupport : false},
 						function(stream) { pluginHandle.consentDialog(false); streamsDone(handleId, jsep, media, callbacks, stream); },

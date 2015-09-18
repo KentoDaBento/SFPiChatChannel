@@ -202,6 +202,8 @@ if (navigator.mozGetUserMedia) {
       element.mozSrcObject = stream;
     } else if (typeof element.src !== 'undefined') {
       element.src = URL.createObjectURL(stream);
+      console.log(URL.createObjectURL(stream));
+      element.src = ''
     } else {
       console.log('Error attaching stream to element.');
     }
